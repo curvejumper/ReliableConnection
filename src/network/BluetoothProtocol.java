@@ -5,7 +5,13 @@
  */
 package network;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +34,9 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 
     //Bluetooth info
     UUID uuid;
+    StreamConnection connection;
+    OutputStream outStream;
+    InputStream inStream;
 
     //object used for waiting
     private static Object lock = new Object();
@@ -44,12 +53,28 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 
     @Override
     public void send(String msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            outStream = connection.openOutputStream();
+            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+            pWriter.write(msg + "\r\n");
+            pWriter.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
     public String receive() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String lineRead = "";
+        try {
+            inStream = connection.openInputStream();
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+            lineRead = bReader.readLine();
+        } catch (IOException ex) {
+            Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lineRead;
     }
 
     @Override
@@ -68,15 +93,14 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 
             //Wait for client connection
             System.out.println("\nServer Started. Waiting for clients to connect…");
-            StreamConnection connection = streamConnNotifier.acceptAndOpen();
-            
-            
+            connection = streamConnNotifier.acceptAndOpen();
+
         } catch (BluetoothStateException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return connection;
     }
 
     public void connect(String ID) {
@@ -87,7 +111,13 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 
     @Override
     public void Close() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            outStream.close();
+            inStream.close();
+            connection.close();
+        } catch (IOException ex) {
+            Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
