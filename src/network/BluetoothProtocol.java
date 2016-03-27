@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.DeviceClass;
+import javax.bluetooth.DiscoveryAgent;
 import javax.bluetooth.DiscoveryListener;
 import javax.bluetooth.LocalDevice;
 import javax.bluetooth.RemoteDevice;
@@ -37,6 +38,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     StreamConnection connection;
     OutputStream outStream;
     InputStream inStream;
+    private boolean server;
 
     //object used for waiting
     private static Object lock = new Object();
@@ -85,15 +87,69 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
             System.out.println("Address: " + localDevice.getBluetoothAddress());
             System.out.println("Name: " + localDevice.getFriendlyName());
 
-            //Create the servicve url
-            String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
+            if (server) {
+                //Create the servicve url
+                String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
 
-            //open server url
-            StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+                //open server url
+                StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 
-            //Wait for client connection
-            System.out.println("\nServer Started. Waiting for clients to connect…");
-            connection = streamConnNotifier.acceptAndOpen();
+                //Wait for client connection
+                System.out.println("\nServer Started. Waiting for clients to connect…");
+                connection = streamConnNotifier.acceptAndOpen();
+            } else {
+                //find devices
+                DiscoveryAgent agent = localDevice.getDiscoveryAgent();
+
+                System.out.println("Starting device inquiry…");
+                agent.startInquiry(DiscoveryAgent.GIAC, this);
+
+                try {
+                    synchronized (lock) {
+                        lock.wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Device Inquiry Completed. ");
+
+//print all devices in vecDevices
+                int deviceCount = vecDevices.size();
+
+                if (deviceCount <= 0) {
+                    System.out.println("No Devices Found .");
+                    System.exit(0);
+                } else { //print bluetooth device addresses and names in the format [ No. address (name) ] 
+                    System.out.println("Bluetooth Devices: ");
+                    for (int i = 0; i < deviceCount; i++) {
+                        RemoteDevice remoteDevice = (RemoteDevice) vecDevices.elementAt(i);
+                        System.out.println((i + 1) + ". " + remoteDevice.getBluetoothAddress() + " (" + remoteDevice.getFriendlyName(true) + ")");
+                    }
+                }
+                System.out.print("Choose Device index: ");
+                BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
+                String chosenIndex = bReader.readLine();
+                int index = Integer.parseInt(chosenIndex.trim());
+                //check for spp service 
+                RemoteDevice remoteDevice = (RemoteDevice) vecDevices.elementAt(index - 1);
+                UUID[] uuidSet = new UUID[1];
+                uuidSet[0] = new UUID("1101", true);
+                System.out.println("\nSearching for service...");
+                agent.searchServices(null, uuidSet, remoteDevice, this);
+                try {
+                    synchronized (lock) {
+                        lock.wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (connectionURL == null) {
+                    System.out.println("Device does not support Simple SPP Service.");
+                    System.exit(0);
+                } //connect to the server and send a line of text 
+                connection = (StreamConnection) Connector.open(connectionURL);
+            }
 
         } catch (BluetoothStateException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,7 +159,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
         return connection;
     }
 
-    public void connect(String ID) {
+    public void connect(String ID, boolean server) {
         //TODO: make sure the ID is four bits
         uuid = new UUID(ID, true);
         connect();
