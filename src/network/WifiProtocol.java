@@ -63,6 +63,9 @@ public class WifiProtocol extends Protocol{
             socket = new Socket(ipAddress, port);
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
+            if(status()){
+                notifyObservers(this);
+            }
         } catch (IOException ex) {
             Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }

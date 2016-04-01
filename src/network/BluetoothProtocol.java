@@ -60,6 +60,9 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
             PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
             pWriter.write(msg + "\r\n");
             pWriter.flush();
+            if(status()){
+                notifyObservers(this);
+            }
         } catch (IOException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
