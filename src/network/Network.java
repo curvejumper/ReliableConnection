@@ -5,7 +5,7 @@
  */
 package network;
 
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,7 +15,11 @@ import java.util.Observer;
  */
 public class Network implements Observer{
 
-    List<Protocol> protocolList;
+    LinkedList<Protocol> protocolList;
+    
+    public Network(){
+        protocolList = new LinkedList();
+    }
     
     private boolean lock = false;
     
@@ -24,8 +28,7 @@ public class Network implements Observer{
     }
     
     public String recieve(){
-        String msg = null;
-        
+        String msg = getBestProtocol().receive();
         return msg;
     }
     

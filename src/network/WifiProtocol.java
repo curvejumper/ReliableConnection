@@ -8,6 +8,7 @@ package network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
  */
 public class WifiProtocol extends Protocol{
 
+    private ServerSocket serverSocket;
     private Socket socket;
     private String ipAddress;
     private int port;
@@ -63,6 +65,7 @@ public class WifiProtocol extends Protocol{
             socket = new Socket(ipAddress, port);
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
+            
             if(status()){
                 notifyObservers(this);
             }
