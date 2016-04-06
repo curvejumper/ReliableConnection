@@ -20,7 +20,6 @@ public class TestServer {
             ServerSocket serverSocket = new ServerSocket(8888);
             while(true){
                 new clientThread(serverSocket.accept()).start(); 
-                
             }
         } catch (IOException ex) {
             Logger.getLogger(TestServer.class.getName()).log(Level.SEVERE, null, ex);
