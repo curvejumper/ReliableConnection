@@ -49,14 +49,8 @@ public class WifiProtocol extends Protocol{
     }
 
     @Override
-    public String receive() {
-        String msg = null;
-        try {
-            msg = inputStream.readUTF();
-        } catch (IOException ex) {
-            Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return msg;
+    public DataInputStream receive() {
+        return inputStream;
     }
 
     @Override

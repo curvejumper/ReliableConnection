@@ -18,8 +18,10 @@ public class TestServer {
     public static void main(String args[]){
         try {
             ServerSocket serverSocket = new ServerSocket(8888);
+            System.out.println("Server started!");
             while(true){
-                new clientThread(serverSocket.accept()).start(); 
+                new clientThread(serverSocket.accept()).start();
+                System.out.println("Accepted client!");
             }
         } catch (IOException ex) {
             Logger.getLogger(TestServer.class.getName()).log(Level.SEVERE, null, ex);

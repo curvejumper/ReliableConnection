@@ -3,20 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package network;
+package reliableconn;
+
+import network.Network;
 
 /**
  *
  * @author michael
  */
-public interface ProtocolInt {
-    public boolean status();
+public class ReliableClient {
     
-    public void send(String msg);
-    
-    public Object receive();
-    
-    public Object connect();
-    
-    public void Close();
+    public ReliableClient(Network network){
+        
+    }
 }

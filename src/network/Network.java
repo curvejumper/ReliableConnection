@@ -5,6 +5,7 @@
  */
 package network;
 
+import java.io.DataInputStream;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -27,9 +28,8 @@ public class Network implements Observer{
          getBestProtocol().send(msg);
     }
     
-    public String recieve(){
-        String msg = getBestProtocol().receive();
-        return msg;
+    public DataInputStream recieve(){
+        return (DataInputStream) getBestProtocol().receive();
     }
     
     @Override
