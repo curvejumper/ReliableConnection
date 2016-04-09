@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +28,14 @@ public class WifiProtocol extends Protocol{
     private int port;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
+    private String[] messages;
+    private int index;
+    
+    
+    public WifiProtocol(){
+        messages = new String[100];
+        index = 0;
+    }
     
     @Override
     //returns a socket status when the socket is 
@@ -49,8 +58,11 @@ public class WifiProtocol extends Protocol{
     }
 
     @Override
-    public DataInputStream receive() {
-        return inputStream;
+    public String[] receive() {
+        String[] message = new String[index];
+        System.arraycopy(messages, 0, message, 0, index);
+        Arrays.fill(messages, null);
+        return message;
     }
 
     @Override
@@ -61,6 +73,8 @@ public class WifiProtocol extends Protocol{
             inputStream = new DataInputStream(socket.getInputStream());
             
             if(status()){
+                //creates thread that checks messages in the network
+                new msgCheck().start();
                 notifyObservers(this);
             }
         } catch (IOException ex) {
@@ -81,6 +95,26 @@ public class WifiProtocol extends Protocol{
             socket.close();
         } catch (IOException ex) {
             Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private class msgCheck extends Thread{
+
+        public msgCheck() {
+        }
+        
+        @Override
+        public void run(){
+            try {
+                while(inputStream.available() > 0){
+                    if(messages[index].isEmpty()){
+                        messages[index] = inputStream.readUTF();
+                        index++;
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

@@ -5,8 +5,9 @@
         <group>
             <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/network/WifiProtocol.java</file>
             <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/network/Network.java</file>
-            <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/network/Protocol.java</file>
+            <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/network/ProtocolInt.java</file>
             <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/network/BluetoothProtocol.java</file>
+            <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/reliableconn/ReliableClient.java</file>
             <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/reliableconn/TestServer.java</file>
             <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/reliableconn/clientThread.java</file>
             <file>file:/C:/Users/micha/Documents/GitHub/ReliableConnection/src/reliableconn/client.java</file>

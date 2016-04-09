@@ -53,7 +53,7 @@ public class client {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
         try {
-            //need to put receive in another thread
+            //TODO: need to put receive in another thread
             while (network1.recieve().available() > 0) {
                 String inputLine = network1.recieve().readUTF();
                 if (inputLine.equals("Bye"))
