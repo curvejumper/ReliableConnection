@@ -70,16 +70,13 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     }
 
     @Override
-    public String receive() {
-        String lineRead = "";
+    public InputStream receive() {
         try {
             inStream = connection.openInputStream();
-            BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-            lineRead = bReader.readLine();
         } catch (IOException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return lineRead;
+        return inStream;
     }
 
     @Override

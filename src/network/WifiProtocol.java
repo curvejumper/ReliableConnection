@@ -8,6 +8,10 @@ package network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
@@ -22,19 +26,19 @@ import java.util.logging.Logger;
  */
 public class WifiProtocol extends Protocol{
 
-    private ServerSocket serverSocket;
+//    private ServerSocket serverSocket;
     private Socket socket;
     private String ipAddress;
     private int port;
-    private DataOutputStream outputStream;
-    private DataInputStream inputStream;
-    private String[] messages;
-    private int index;
+    private OutputStream outputStream;
+    private InputStream inputStream;
+//    private String[] messages;
+//    private int index;
     
     
     public WifiProtocol(){
-        messages = new String[100];
-        index = 0;
+//        messages = new String[100];
+//        index = 0;
     }
     
     @Override
@@ -50,31 +54,31 @@ public class WifiProtocol extends Protocol{
     @Override
     public void send(String msg) {
          try {
-            outputStream.writeUTF(msg);
-            outputStream.flush();
+            outputStream = socket.getOutputStream();
+            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outputStream));
+            pWriter.write(msg + "\r\n");
+            pWriter.flush();
         } catch (IOException ex) {
             notifyObservers(ex);
         }
     }
 
     @Override
-    public String[] receive() {
-        String[] message = new String[index];
-        System.arraycopy(messages, 0, message, 0, index);
-        Arrays.fill(messages, null);
-        return message;
+    public InputStream receive() {
+        try {
+            inputStream = socket.getInputStream();
+        } catch (IOException ex) {
+            Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return inputStream;
     }
 
     @Override
     public Object connect() {
         try {
             socket = new Socket(ipAddress, port);
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
-            
             if(status()){
                 //creates thread that checks messages in the network
-                new msgCheck().start();
                 notifyObservers(this);
             }
         } catch (IOException ex) {
@@ -98,24 +102,24 @@ public class WifiProtocol extends Protocol{
         }
     }
 
-    private class msgCheck extends Thread{
-
-        public msgCheck() {
-        }
-        
-        @Override
-        public void run(){
-            try {
-                while(inputStream.available() > 0){
-                    if(messages[index].isEmpty()){
-                        messages[index] = inputStream.readUTF();
-                        index++;
-                    }
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+//    private class msgCheck extends Thread{
+//
+//        public msgCheck() {
+//        }
+//        
+//        @Override
+//        public void run(){
+//            try {
+//                while(inputStream.available() > 0){
+//                    if(messages[index] == null){
+//                        messages[index] = inputStream.readUTF();
+//                        index++;
+//                    }
+//                }
+//            } catch (IOException ex) {
+//                Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
     
 }

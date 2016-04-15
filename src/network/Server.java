@@ -51,8 +51,8 @@ public class Server extends Thread{
             
             System.out.println("Wifi1 sending 'hello world'");
             wifi1.send("Hello World");
-            String message = wifi1.receive();
-            System.out.println("wifi1: " + message);
+            //String message = wifi1.receive();
+            //System.out.println("wifi1: " + message);
             
             WifiProtocol wifi2 = new WifiProtocol();
             wifi2.connect("localhost", 8888);
@@ -60,7 +60,7 @@ public class Server extends Thread{
         
             System.out.println("Wifi1 sending 'hello world'");
             wifi1.send("Hello World");
-            String message2 = wifi2.receive();
-            System.out.println("wifi2: " + message2);
+            //String message2 = wifi2.receive();
+            //System.out.println("wifi2: " + message2);
     }
 }

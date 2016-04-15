@@ -38,35 +38,44 @@ public class client {
         BluetoothProtocol bP = new BluetoothProtocol();
         WifiProtocol wP = new WifiProtocol();
         
+        BluetoothProtocol bP2 = new BluetoothProtocol();
+        WifiProtocol wP2 = new WifiProtocol();
+        
         wP.addObserver(network1);
         bP.addObserver(network1);
         
-        wP.addObserver(network2);
-        bP.addObserver(network2);
+        wP2.addObserver(network2);
+        bP2.addObserver(network2);
         
         System.out.println("Attemting to connect...");
         wP.connect("localhost", 8888);
-
+        wP2.connect("localhost", 8888);
         System.out.println("Connected to server!");
         
-        
-        InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(isr);
-        try {
-            //TODO: need to put receive in another thread
-            while (network1.recieve().available() > 0) {
-                String inputLine = network1.recieve().readUTF();
-                if (inputLine.equals("Bye"))
-                    break;
-                System.out.println(inputLine);
-                out.writeUTF(inputLine);
-                out.flush();
-            }
-            
-        } catch (IOException ex) {
-            Logger.getLogger(client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        //start two new threads for receving messages
         
     }
+    
+    
+    
+    //    private class msgCheck extends Thread{
+//
+//        public msgCheck() {
+//        }
+//        
+//        @Override
+//        public void run(){
+//            try {
+//                while(inputStream.available() > 0){
+//                    if(messages[index] == null){
+//                        messages[index] = inputStream.readUTF();
+//                        index++;
+//                    }
+//                }
+//            } catch (IOException ex) {
+//                Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
+    
 }

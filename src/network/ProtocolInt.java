@@ -5,6 +5,8 @@
  */
 package network;
 
+import java.io.InputStream;
+
 /**
  *
  * @author michael
@@ -14,7 +16,7 @@ public interface ProtocolInt {
     
     public void send(String msg);
     
-    public Object receive();
+    public InputStream receive();
     
     public Object connect();
     
