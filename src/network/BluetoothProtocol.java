@@ -54,23 +54,23 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     }
 
     @Override
-    public void send(String msg) {
+    public OutputStream getOutputStream() {
         try {
             outStream = connection.openOutputStream();
-            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-            pWriter.write(msg + "\r\n");
-            pWriter.flush();
+//            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
+//            pWriter.write(msg + "\r\n");
+//            pWriter.flush();
             if(status()){
                 notifyObservers(this);
             }
         } catch (IOException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return outStream;
     }
 
     @Override
-    public InputStream receive() {
+    public InputStream getInputStream() {
         try {
             inStream = connection.openInputStream();
         } catch (IOException ex) {
@@ -147,7 +147,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
                 if (connectionURL == null) {
                     System.out.println("Device does not support Simple SPP Service.");
                     System.exit(0);
-                } //connect to the server and send a line of text 
+                } //connect to the server and getOutputStream a line of text 
                 connection = (StreamConnection) Connector.open(connectionURL);
             }
 

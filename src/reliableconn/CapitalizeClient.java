@@ -24,6 +24,69 @@ import javax.swing.JTextField;
 import network.BluetoothProtocol;
 import network.Network;
 import network.WifiProtocol;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
+import static java.lang.Thread.sleep;
 
 /**
  * A simple Swing-based client for the chat server.  Graphically
@@ -44,7 +107,7 @@ import network.WifiProtocol;
 public class CapitalizeClient {
 
     BufferedReader in;
-//    PrintWriter out;
+    PrintWriter out;
     Network network;
     JFrame frame = new JFrame("Chatter");
     JTextField textField = new JTextField(40);
@@ -75,8 +138,8 @@ public class CapitalizeClient {
              * the text area in preparation for the next message.
              */
             public void actionPerformed(ActionEvent e) {
-//                out.println(textField.getText());
-                network.send(textField.getText());
+                out.println(textField.getText());
+//                network.getOutputStream(textField.getText());
                 textField.setText("");
             }
         });
@@ -127,15 +190,15 @@ public class CapitalizeClient {
         wP.connect(address, 8888);
         System.out.println("Connected to server!");
         
-        in = new BufferedReader(new InputStreamReader(network.recieve()));
-        //out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(network.getInputStream()));
+        out = new PrintWriter(network.getOutputStream(), true);
 
         // Process all messages from server, according to the protocol.
         while (true) {
             String line = in.readLine();
             if (line.startsWith("SUBMITNAME")) {
-                //out.println(getName());
-                network.send(getName());
+                out.println(getName());
+//                network.getOutputStream(getName());
             } else if (line.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
             } else if (line.startsWith("MESSAGE")) {

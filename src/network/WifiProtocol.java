@@ -52,19 +52,20 @@ public class WifiProtocol extends Protocol{
     private static final String CRLF = "\r\n"; // newline
 
     @Override
-    public void send(String msg) {
+    public OutputStream getOutputStream() {
          try {
             outputStream = socket.getOutputStream();
-            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outputStream));
-            pWriter.write(msg + "\r\n");
-            pWriter.flush();
+//            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outputStream));
+//            pWriter.write(msg + "\r\n");
+//            pWriter.flush();
         } catch (IOException ex) {
             notifyObservers(ex);
         }
+        return outputStream;
     }
 
     @Override
-    public InputStream receive() {
+    public InputStream getInputStream() {
         try {
             inputStream = socket.getInputStream();
         } catch (IOException ex) {
@@ -75,14 +76,11 @@ public class WifiProtocol extends Protocol{
 
     @Override
     public Object connect() {
-        try {
-            socket = new Socket(ipAddress, port);
-            if(status()){
-                //creates thread that checks messages in the network
-                notifyObservers(this);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
+//            socket = new Socket(ipAddress, port);
+        if(status()){
+            //creates thread that checks messages in the network
+            System.out.println("notifying network that connection is good");
+            notifyObservers(this);
         }
         return socket;
     }
@@ -90,6 +88,16 @@ public class WifiProtocol extends Protocol{
     public void connect(String ipAddress, int port){
         this.ipAddress = ipAddress;
         this.port = port;
+        try {
+            socket = new Socket(ipAddress, port);
+        } catch (IOException ex) {
+            Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        connect();
+    }
+    
+    public void connect(Socket socket){
+        this.socket = socket;
         connect();
     }
 

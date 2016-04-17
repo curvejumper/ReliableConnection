@@ -7,6 +7,7 @@ package network;
 
 import java.io.DataInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -25,12 +26,12 @@ public class Network implements Observer{
     
     private boolean lock = false;
     
-    public void send(String msg){
-         getBestProtocol().send(msg);
+    public OutputStream getOutputStream(){
+         return getBestProtocol().getOutputStream();
     }
     
-    public InputStream recieve(){
-        return getBestProtocol().receive();
+    public InputStream getInputStream(){
+        return getBestProtocol().getInputStream();
     }
     
     @Override

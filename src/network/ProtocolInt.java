@@ -6,6 +6,7 @@
 package network;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
@@ -14,9 +15,9 @@ import java.io.InputStream;
 public interface ProtocolInt {
     public boolean status();
     
-    public void send(String msg);
+    public OutputStream getOutputStream();
     
-    public InputStream receive();
+    public InputStream getInputStream();
     
     public Object connect();
     
