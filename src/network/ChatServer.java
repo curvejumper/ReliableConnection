@@ -12,6 +12,11 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
+import javax.bluetooth.RemoteDevice;
+import javax.bluetooth.UUID;
+import javax.microedition.io.Connector;
+import javax.microedition.io.StreamConnection;
+import javax.microedition.io.StreamConnectionNotifier;
 
 /**
  * A multithreaded chat room server. When a client connects the server requests
@@ -54,11 +59,25 @@ public class ChatServer {
      * handler threads.
      */
     public static void main(String[] args) throws Exception {
+        
+        //Create a UUID for SPP
+        UUID uuid = new UUID("1101", true);
+//Create the servicve url
+        String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
+
+//open server url
+        StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+
+//Wait for client connection
+        System.out.println("\nServer Started. Waiting for clients to connect…");
+//        StreamConnection connection = streamConnNotifier.acceptAndOpen();
+        
         System.out.println("The chat server is running.");
         ServerSocket listener = new ServerSocket(PORT);
+        
         try {
             while (true) {
-                new Handler(listener.accept()).start();
+                new Handler(listener.accept(), streamConnNotifier.acceptAndOpen()).start();
             }
         } finally {
             listener.close();
@@ -84,7 +103,7 @@ public class ChatServer {
          * Constructs a handler thread, squirreling away the socket. All the
          * interesting work is done in the run method.
          */
-        public Handler(Socket socket) {
+        public Handler(Socket socket, StreamConnection connection) {
             this.socket = socket;
             network = new Network();
             BluetoothProtocol bP = new BluetoothProtocol();
@@ -94,6 +113,7 @@ public class ChatServer {
             bP.addObserver(network);
 
             wP.connect(socket);
+            bP.connect(connection);
         } 
 
         /**

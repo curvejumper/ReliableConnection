@@ -188,6 +188,7 @@ public class CapitalizeClient {
         String address = getServerAddress();
         System.out.println("Address: " + address);
         wP.connect(address, 8888);
+        bP.connect("1101", true);
         System.out.println("Connected to server!");
         
         in = new BufferedReader(new InputStreamReader(network.getInputStream()));

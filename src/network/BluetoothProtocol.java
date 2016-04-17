@@ -159,9 +159,15 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
         return connection;
     }
 
-    public void connect(String ID, boolean server) {
+    public void connect(String ID, boolean isServer) {
         //TODO: make sure the ID is four bits
         uuid = new UUID(ID, true);
+        connect();
+    }
+    
+    public void connect(StreamConnection connection) {
+        //TODO: make sure the ID is four bits
+        this.connection = connection;
         connect();
     }
 
