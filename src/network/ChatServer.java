@@ -126,9 +126,9 @@ public class ChatServer {
             try {
 
                 // Create character streams for the socket.
-                in = new BufferedReader(new InputStreamReader(
-                        network.getInputStream()));
-                out = new PrintWriter(network.getOutputStream(), true);
+//                in = new BufferedReader(new InputStreamReader(
+//                        network.getInputStream()));
+//                out = new PrintWriter(network.getOutputStream(), true);
 
                 // Request a name from this client.  Keep requesting until
                 // a name is submitted that is not already used.  Note that
