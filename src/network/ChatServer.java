@@ -94,8 +94,6 @@ public class ChatServer {
         private String name;
         private Socket socket;
         Network network;
-        private BufferedReader in;
-        private PrintWriter out;
         private WifiProtocol wifiProtocol;
         private BluetoothProtocol bluetoothProtocol;
 
@@ -135,9 +133,9 @@ public class ChatServer {
                 // checking for the existence of a name and adding the name
                 // must be done while locking the set of names.
                 while (true) {
-                    out.println("SUBMITNAME");
+                    network.getOutputStream().println("SUBMITNAME");
 //                    network.getOutputStream("SUBMITNAME");
-                    name = in.readLine();
+                    name = network.getInputStream().readLine();
                     if (name == null) {
                         return;
                     }
@@ -152,14 +150,14 @@ public class ChatServer {
                 // Now that a successful name has been chosen, add the
                 // socket's print writer to the set of all writers so
                 // this client can receive broadcast messages.
-                out.println("NAMEACCEPTED");
+                network.getOutputStream().println("NAMEACCEPTED");
 //                network.getOutputStream("NAMEACCEPTED");
-                writers.add(out);
+                writers.add(network.getOutputStream());
 
                 // Accept messages from this client and broadcast them.
                 // Ignore other clients that cannot be broadcasted to.
                 while (true) {
-                    String input = in.readLine();
+                    String input = network.getInputStream().readLine();
                     if (input == null) {
                         return;
                     }
@@ -175,8 +173,8 @@ public class ChatServer {
                 if (name != null) {
                     names.remove(name);
                 }
-                if (out != null) {
-                    writers.remove(out);
+                if (network.getOutputStream() != null) {
+                    writers.remove(network.getOutputStream());
                 }
                 try {
                     socket.close();

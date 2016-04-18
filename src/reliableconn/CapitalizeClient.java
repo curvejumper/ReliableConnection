@@ -226,14 +226,12 @@ public class CapitalizeClient implements DiscoveryListener {
         }
         System.out.println("Connected to server!");
 
-        in = new BufferedReader(new InputStreamReader(network.getInputStream()));
-        out = new PrintWriter(network.getOutputStream(), true);
 
         // Process all messages from server, according to the protocol.
         while (true) {
-            String line = in.readLine();
+            String line = network.getInputStream().readLine();
             if (line.startsWith("SUBMITNAME")) {
-                out.println(getName());
+                network.getOutputStream().println(getName());
 //                network.getOutputStream(getName());
             } else if (line.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
