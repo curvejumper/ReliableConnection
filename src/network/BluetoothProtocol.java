@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.bluetooth.BluetoothConnectionException;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.DeviceClass;
 import javax.bluetooth.DiscoveryAgent;
@@ -171,7 +172,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
         connect();
     }
 
-    public void connect(RemoteDevice remoteDevice) {
+    public void connect(RemoteDevice remoteDevice) throws BluetoothConnectionException{
         LocalDevice localDevice;
         try {
             localDevice = LocalDevice.getLocalDevice();

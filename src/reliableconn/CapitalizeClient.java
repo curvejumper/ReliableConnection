@@ -48,6 +48,7 @@ import static java.lang.Thread.sleep;
 import static java.lang.Thread.sleep;
 import static java.lang.Thread.sleep;
 import static java.lang.Thread.sleep;
+import javax.bluetooth.BluetoothConnectionException;
 
 /**
  * A simple Swing-based client for the chat server. Graphically it is a frame
@@ -218,7 +219,11 @@ public class CapitalizeClient implements DiscoveryListener {
         RemoteDevice btDevice = getBtServerAddress();
         System.out.println("Address: " + wifiAddress);
         wP.connect(wifiAddress, 8888);
-        bP.connect(btDevice);
+        try {
+            bP.connect(btDevice);
+        } catch (BluetoothConnectionException ex){
+            Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("Connected to server!");
 
         in = new BufferedReader(new InputStreamReader(network.getInputStream()));
