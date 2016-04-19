@@ -40,7 +40,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     OutputStream outStream;
     InputStream inStream;
     private boolean server;
-
+    private boolean isConnected = false;
     //object used for waiting
     private static Object lock = new Object();
 
@@ -51,7 +51,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 
     @Override
     public boolean status() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return isConnected;
     }
 
     @Override
@@ -169,6 +169,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     public void connect(StreamConnection connection) {
         //TODO: make sure the ID is four bits
         this.connection = connection;
+        isConnected = true;
         connect();
     }
 
@@ -192,8 +193,13 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
             if (connectionURL == null) {
                 System.out.println("Device does not support Simple SPP Service.");
                 System.exit(0);
+//                isConnected = false;
             } //connect to the server and getOutputStream a line of text 
-            connection = (StreamConnection) Connector.open(connectionURL);
+            else {
+                connection = (StreamConnection) Connector.open(connectionURL);
+                isConnected = true;
+            }
+            
 //            }
 
         } catch (BluetoothStateException ex) {
@@ -250,4 +256,8 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 
     }//end method
 
+    @Override
+    public String toString(){
+        return "Bluetooth protocol";
+    }
 }

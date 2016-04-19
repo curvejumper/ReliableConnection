@@ -52,7 +52,7 @@ public class ChatServer {
      * The set of all the print writers for all the clients. This set is kept so
      * we can easily broadcast messages.
      */
-    private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
+    private static HashSet<Network> writers = new HashSet<Network>();
 
     /**
      * The appplication main method, which just listens on a port and spawns
@@ -77,6 +77,7 @@ public class ChatServer {
         
         try {
             while (true) {
+                //For this project, assume that initial connection works
                 new Handler(listener.accept(), streamConnNotifier.acceptAndOpen()).start();
             }
         } finally {
@@ -94,8 +95,6 @@ public class ChatServer {
         private String name;
         private Socket socket;
         Network network;
-        private WifiProtocol wifiProtocol;
-        private BluetoothProtocol bluetoothProtocol;
 
         /**
          * Constructs a handler thread, squirreling away the socket. All the
@@ -121,6 +120,7 @@ public class ChatServer {
          * repeatedly gets inputs and broadcasts them.
          */
         public void run() {
+            System.out.println("Starting new handler!");
             try {
 
                 // Create character streams for the socket.
@@ -152,7 +152,7 @@ public class ChatServer {
                 // this client can receive broadcast messages.
                 network.getOutputStream().println("NAMEACCEPTED");
 //                network.getOutputStream("NAMEACCEPTED");
-                writers.add(network.getOutputStream());
+                writers.add(network);
 
                 // Accept messages from this client and broadcast them.
                 // Ignore other clients that cannot be broadcasted to.
@@ -161,8 +161,8 @@ public class ChatServer {
                     if (input == null) {
                         return;
                     }
-                    for (PrintWriter writer : writers) {
-                        writer.println("MESSAGE " + name + ": " + input);
+                    for (Network writer : writers) {
+                        writer.getOutputStream().println("MESSAGE " + name + ": " + input);
                     }
                 }
             } catch (IOException e) {
@@ -174,7 +174,7 @@ public class ChatServer {
                     names.remove(name);
                 }
                 if (network.getOutputStream() != null) {
-                    writers.remove(network.getOutputStream());
+                    writers.remove(network);
                 }
                 try {
                     socket.close();

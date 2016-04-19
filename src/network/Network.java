@@ -22,6 +22,8 @@ import java.util.Observer;
 public class Network implements Observer{
 
     LinkedList<Protocol> protocolList;
+    PrintWriter printWriter = null;
+    BufferedReader bufferedReader = null;
     
     public Network(){
         protocolList = new LinkedList();
@@ -30,12 +32,22 @@ public class Network implements Observer{
     private boolean lock = false;
     
     public PrintWriter getOutputStream(){
-        return new PrintWriter(getBestProtocol().getOutputStream(), true);
+        if(getBestProtocol().hasChanged() || printWriter == null){
+            printWriter = new PrintWriter(getBestProtocol().getOutputStream(), true);
+            return printWriter;
+        } else {
+            return printWriter;
+        }
     }
     
     public BufferedReader getInputStream(){
-        return new BufferedReader(new InputStreamReader(
+        if(getBestProtocol().hasChanged() || bufferedReader == null){
+            bufferedReader = new BufferedReader(new InputStreamReader(
                         getBestProtocol().getInputStream()));
+            return bufferedReader;
+        } else {
+            return bufferedReader;
+        }
     }
     
     @Override
@@ -46,6 +58,7 @@ public class Network implements Observer{
     private Protocol getBestProtocol() {
         for(Protocol protocol : protocolList){
             if(protocol.status()){
+                System.out.println("Using: " + protocol.toString());
                 return protocol;
             }
         }

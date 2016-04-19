@@ -25,12 +25,6 @@ import network.BluetoothProtocol;
 import network.Network;
 import network.WifiProtocol;
 import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.bluetooth.BluetoothStateException;
@@ -40,14 +34,6 @@ import javax.bluetooth.DiscoveryListener;
 import javax.bluetooth.LocalDevice;
 import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.ServiceRecord;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
 import javax.bluetooth.BluetoothConnectionException;
 
 /**
@@ -220,7 +206,9 @@ public class CapitalizeClient implements DiscoveryListener {
         System.out.println("Address: " + wifiAddress);
         wP.connect(wifiAddress, 8888);
         try {
-            bP.connect(btDevice);
+            if(btDevice != null){
+                bP.connect(btDevice);
+            }
         } catch (BluetoothConnectionException ex){
             Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
         }

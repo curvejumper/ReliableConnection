@@ -109,6 +109,11 @@ public class WifiProtocol extends Protocol{
             Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @Override
+    public String toString(){
+        return "Wifi protocol";
+    }
 
 //    private class msgCheck extends Thread{
 //
