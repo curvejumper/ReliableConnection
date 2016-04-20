@@ -90,7 +90,7 @@ public class CapitalizeClient implements DiscoveryListener {
              * area in preparation for the next message.
              */
             public void actionPerformed(ActionEvent e) {
-                out.println(textField.getText());
+                network.getOutputStream().println(textField.getText());
 //                network.getOutputStream(textField.getText());
                 textField.setText("");
             }
