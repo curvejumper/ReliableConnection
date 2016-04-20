@@ -209,12 +209,8 @@ public class CapitalizeClient implements DiscoveryListener {
             if(btDevice != null){
                 bP.connect(btDevice);
             }
-        } catch (BluetoothConnectionException ex){
-            Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         System.out.println("Connected to server!");
-
-
         // Process all messages from server, according to the protocol.
         while (true) {
             String line = network.getInputStream().readLine();
@@ -227,10 +223,15 @@ public class CapitalizeClient implements DiscoveryListener {
                 messageArea.append(line.substring(8) + "\n");
             }
         }
+        } catch (BluetoothConnectionException ex){
+            Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
      * Runs the client as an application with a closeable frame.
+     * @param args
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
         CapitalizeClient client = new CapitalizeClient();
