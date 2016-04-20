@@ -166,7 +166,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
         connect();
     }
     
-    public void connect(StreamConnection connection) {
+    public void connect(StreamConnection connection) throws BluetoothConnectionException {
         //TODO: make sure the ID is four bits
         this.connection = connection;
         isConnected = true;

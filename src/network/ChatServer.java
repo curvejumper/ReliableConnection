@@ -12,11 +12,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.bluetooth.BluetoothConnectionException;
 import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
+import reliableconn.CapitalizeClient;
 
 /**
  * A multithreaded chat room server. When a client connects the server requests
@@ -59,7 +63,7 @@ public class ChatServer {
      * handler threads.
      */
     public static void main(String[] args) throws Exception {
-        
+
         //Create a UUID for SPP
         UUID uuid = new UUID("1101", true);
 //Create the servicve url
@@ -71,10 +75,10 @@ public class ChatServer {
 //Wait for client connection
         System.out.println("\nServer Started. Waiting for clients to connect…");
 //        StreamConnection connection = streamConnNotifier.acceptAndOpen();
-        
+
         System.out.println("The chat server is running.");
         ServerSocket listener = new ServerSocket(PORT);
-        
+
         try {
             while (true) {
                 //For this project, assume that initial connection works
@@ -110,8 +114,12 @@ public class ChatServer {
             bP.addObserver(network);
 
             wP.connect(socket);
-            bP.connect(connection);
-        } 
+            try {
+                bP.connect(connection);
+            } catch (BluetoothConnectionException ex) {
+                Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         /**
          * Services this thread's client by repeatedly requesting a screen name
@@ -127,7 +135,6 @@ public class ChatServer {
 //                in = new BufferedReader(new InputStreamReader(
 //                        network.getInputStream()));
 //                out = new PrintWriter(network.getOutputStream(), true);
-
                 // Request a name from this client.  Keep requesting until
                 // a name is submitted that is not already used.  Note that
                 // checking for the existence of a name and adding the name
