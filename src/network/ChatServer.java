@@ -61,6 +61,8 @@ public class ChatServer {
     /**
      * The appplication main method, which just listens on a port and spawns
      * handler threads.
+     * @param args
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
 
@@ -127,6 +129,7 @@ public class ChatServer {
          * registers the output stream for the client in a global set, then
          * repeatedly gets inputs and broadcasts them.
          */
+        @Override
         public void run() {
             System.out.println("Starting new handler!");
             try {
