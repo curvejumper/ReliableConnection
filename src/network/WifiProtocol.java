@@ -5,16 +5,11 @@
  */
 package network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,25 +109,5 @@ public class WifiProtocol extends Protocol{
     public String toString(){
         return "Wifi protocol";
     }
-
-//    private class msgCheck extends Thread{
-//
-//        public msgCheck() {
-//        }
-//        
-//        @Override
-//        public void run(){
-//            try {
-//                while(inputStream.available() > 0){
-//                    if(messages[index] == null){
-//                        messages[index] = inputStream.readUTF();
-//                        index++;
-//                    }
-//                }
-//            } catch (IOException ex) {
-//                Logger.getLogger(WifiProtocol.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
     
 }

@@ -9,10 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import static java.lang.Thread.sleep;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +22,6 @@ import javax.swing.JTextField;
 import network.BluetoothProtocol;
 import network.Network;
 import network.WifiProtocol;
-import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.bluetooth.BluetoothStateException;
