@@ -61,9 +61,12 @@ public class Network implements Observer{
         }
         //no protocol found, must mean none are connected
         //need to connect to protocol
-        protocolList.stream().forEach((protocol) -> {
-            protocol.connect();
-        });
+//        protocolList.stream().forEach((protocol) -> {
+//            protocol.connect();
+//        });
+        for(int i = 0; i < protocolList.size(); i++){
+            protocolList.get(i).connect();
+        }
         
         //connection has been attempted again, try to connect to one
         if(!lock){
