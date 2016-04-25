@@ -33,7 +33,7 @@ public class Network implements Observer{
             printWriter = new PrintWriter(getBestProtocol().getOutputStream(), true);
             return printWriter;
         } else {
-            return printWriter;
+            return checkPrintWriter(printWriter);
         }
     }
     
@@ -43,7 +43,8 @@ public class Network implements Observer{
                         getBestProtocol().getInputStream()));
             return bufferedReader;
         } else {
-            return bufferedReader;
+//            make sure stream is still connected
+            return checkBufferedReader(bufferedReader);
         }
     }
     
