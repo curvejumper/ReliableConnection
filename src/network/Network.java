@@ -6,11 +6,14 @@
 package network;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -80,6 +83,25 @@ public class Network implements Observer{
     private void add(Protocol protocol) {
         if(!protocolList.contains(protocol)){
             protocolList.add(protocol);
+        }
+    }
+
+    private PrintWriter checkPrintWriter(PrintWriter printWriter) {
+        return printWriter.checkError() ? new PrintWriter(getBestProtocol().getOutputStream(), true) : printWriter;
+    }
+
+    private BufferedReader checkBufferedReader(BufferedReader bufferedReader) {
+        try { 
+             if(bufferedReader.ready()){
+                 return bufferedReader;
+             } else {
+                 return new BufferedReader(new InputStreamReader(
+                        getBestProtocol().getInputStream()));
+             }
+        } catch (IOException ex) {
+            Logger.getLogger(Network.class.getName()).log(Level.SEVERE, null, ex);
+            return new BufferedReader(new InputStreamReader(
+                        getBestProtocol().getInputStream()));
         }
     }
     
