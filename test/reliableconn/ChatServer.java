@@ -18,6 +18,8 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import network.Network;
 import reliableconn.ChatClient;
 
@@ -66,28 +68,116 @@ public class ChatServer {
      */
     public static void main(String[] args) throws Exception {
 
-        //Create a UUID for SPP
-        UUID uuid = new UUID("1101", true);
-        //Create the servicve url
-        String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
+        String selection = serverSelection();
 
-        //open server url
-        StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+        switch (selection.toLowerCase()) {
+            case "bluetooth":
+                bluetoothServer();
+                break;
+            case "wifi":
+                wifiServer();
+                break;
+            case "both":
+                btWifiServer();
+                break;
+            default:
+                serverSelection("incorrect selection, try again");
+        }
 
-        //Wait for client connection
-        System.out.println("\nServer Started. Waiting for clients to connect…");
-        //StreamConnection connection = streamConnNotifier.acceptAndOpen();
+    }
 
-        System.out.println("The chat server is running.");
-        ServerSocket listener = new ServerSocket(PORT);
+    private static String serverSelection() {
+        return serverSelection("");
+    }
+    
+    private static String serverSelection(String msg) {
+        String[] servers = {"Bluetooth", "Wifi", "Both"};
+        return (String) JOptionPane.showInputDialog(new JFrame(),
+                msg + "\n"
+                + "Choose Server Type:",
+                "Customized Dialog",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                servers,
+                "");
+    }
 
+    private static void btWifiServer() {
         try {
-            while (true) {
-                //For this project, assume that initial connection works
-                new Handler(listener.accept(), streamConnNotifier.acceptAndOpen()).start();
+            //Create a UUID for SPP
+            UUID uuid = new UUID("1101", true);
+            //Create the servicve url
+            String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
+
+            //open server url
+            StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+
+            //Wait for client connection
+            System.out.println("\nServer Started. Waiting for clients to connect…");
+            //StreamConnection connection = streamConnNotifier.acceptAndOpen();
+
+            System.out.println("The chat server is running.");
+            ServerSocket listener = new ServerSocket(PORT);
+
+            try {
+                while (true) {
+                    //For this project, assume that initial connection works
+                    new Handler(listener.accept(), streamConnNotifier.acceptAndOpen()).start();
+                }
+            } finally {
+                listener.close();
+                streamConnNotifier.close();
             }
-        } finally {
-            listener.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static void wifiServer() {
+        try {
+            ServerSocket listener = new ServerSocket(PORT);
+            System.out.println("Server is on and waiting");
+            try {
+                while (true) {
+                    //For this project, assume that initial connection works
+                    new Handler(listener.accept()).start();
+                }
+            } finally {
+                listener.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ChatServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static void bluetoothServer() {
+        try {
+//          Create a UUID for SPP
+            UUID uuid = new UUID("1101", true);
+//          Create the servicve url
+            String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
+
+//          open server url
+            StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+
+//          Wait for client connection
+            System.out.println("\nServer Started. Waiting for clients to connect…");
+//          StreamConnection connection = streamConnNotifier.acceptAndOpen();
+
+            System.out.println("The chat server is running.");
+
+            try {
+                while (true) {
+                    //For this project, assume that initial connection works
+                    new Handler(streamConnNotifier.acceptAndOpen()).start();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ChatServer.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                streamConnNotifier.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ChatServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -116,6 +206,28 @@ public class ChatServer {
             bP.addObserver(network);
 
             wP.connect(socket);
+            try {
+                bP.connect(connection);
+            } catch (BluetoothConnectionException ex) {
+                Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        public Handler(Socket socket) {
+            this.socket = socket;
+            network = new Network();
+            WifiProtocol wP = new WifiProtocol();
+
+            wP.addObserver(network);
+
+            wP.connect(socket);
+        }
+
+        public Handler(StreamConnection connection) {
+            network = new Network();
+            BluetoothProtocol bP = new BluetoothProtocol();
+
+            bP.addObserver(network);
             try {
                 bP.connect(connection);
             } catch (BluetoothConnectionException ex) {
