@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package network;
+package protocol;
 
 
+import protocol.Protocol;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

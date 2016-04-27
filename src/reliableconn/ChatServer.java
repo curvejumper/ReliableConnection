@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package network;
+package reliableconn;
 
+import protocol.BluetoothProtocol;
+import protocol.WifiProtocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,6 +18,7 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
+import network.Network;
 import reliableconn.ChatClient;
 
 /**
