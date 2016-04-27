@@ -16,7 +16,7 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
-import reliableconn.CapitalizeClient;
+import reliableconn.ChatClient;
 
 /**
  * A multithreaded chat room server. When a client connects the server requests
@@ -115,7 +115,7 @@ public class ChatServer {
             try {
                 bP.connect(connection);
             } catch (BluetoothConnectionException ex) {
-                Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

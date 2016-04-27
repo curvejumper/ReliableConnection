@@ -32,6 +32,7 @@ import javax.bluetooth.LocalDevice;
 import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.ServiceRecord;
 import javax.bluetooth.BluetoothConnectionException;
+import static java.lang.Thread.sleep;
 
 /**
  * A simple Swing-based client for the chat server. Graphically it is a frame
@@ -47,7 +48,7 @@ import javax.bluetooth.BluetoothConnectionException;
  * When the server sends a line beginning with "MESSAGE " then all characters
  * following this string should be displayed in its message area.
  */
-public class CapitalizeClient implements DiscoveryListener {
+public class ChatClient implements DiscoveryListener {
 
     BufferedReader in;
     PrintWriter out;
@@ -70,7 +71,7 @@ public class CapitalizeClient implements DiscoveryListener {
      * initially NOT editable, and only becomes editable AFTER the client
      * receives the NAMEACCEPTED message from the server.
      */
-    public CapitalizeClient() {
+    public ChatClient() {
 
         // Layout GUI
         textField.setEditable(false);
@@ -130,9 +131,9 @@ public class CapitalizeClient implements DiscoveryListener {
             System.out.println("Device Inquiry Completed. ");
 
         } catch (BluetoothStateException ex) {
-            Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //print all devices in arrDevices
@@ -149,7 +150,7 @@ public class CapitalizeClient implements DiscoveryListener {
                 try {
                     btDeviceNames[i] = (i + 1) + ". " + btDevice.getBluetoothAddress() + " (" + btDevice.getFriendlyName(true) + ")";
                 } catch (IOException ex) {
-                    Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             String btDevice = (String) JOptionPane.showInputDialog(frame,
@@ -221,7 +222,7 @@ public class CapitalizeClient implements DiscoveryListener {
             }
         }
         } catch (BluetoothConnectionException ex){
-            Logger.getLogger(CapitalizeClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -231,7 +232,7 @@ public class CapitalizeClient implements DiscoveryListener {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        CapitalizeClient client = new CapitalizeClient();
+        ChatClient client = new ChatClient();
         client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         client.frame.setVisible(true);
         client.run();
