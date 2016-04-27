@@ -5,7 +5,6 @@
  */
 package protocol;
 
-import protocol.Protocol;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,12 +34,11 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     StreamConnection connection;
     OutputStream outStream;
     InputStream inStream;
-    private boolean server;
     private boolean isConnected = false;
     //object used for waiting
     private static Object lock = new Object();
 
-//vector containing the devices discovered
+    //vector containing the devices discovered
     private static Vector vecDevices = new Vector();
 
     private static String connectionURL = null;
@@ -156,11 +154,6 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
         return connection;
     }
 
-    public void connect(String ID, boolean isServer) {
-        //TODO: make sure the ID is four bits
-        uuid = new UUID(ID, true);
-        connect();
-    }
     
     public void connect(StreamConnection connection) throws BluetoothConnectionException {
         //TODO: make sure the ID is four bits

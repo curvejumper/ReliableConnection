@@ -60,7 +60,7 @@ public class ChatClient implements DiscoveryListener {
     //object used for waiting
     private static Object lock = new Object();
 
-//vector containing the devices discovered
+    //vector containing the devices discovered
     private static ArrayList arrDevices = new ArrayList();
     private static String connectionURL = null;
 
@@ -89,7 +89,7 @@ public class ChatClient implements DiscoveryListener {
              */
             public void actionPerformed(ActionEvent e) {
                 network.getOutputStream().println(textField.getText());
-//                network.getOutputStream(textField.getText());
+                //network.getOutputStream(textField.getText());
                 textField.setText("");
             }
         });
@@ -214,7 +214,7 @@ public class ChatClient implements DiscoveryListener {
             String line = network.getInputStream().readLine();
             if (line.startsWith("SUBMITNAME")) {
                 network.getOutputStream().println(getName());
-//                network.getOutputStream(getName());
+                //network.getOutputStream(getName());
             } else if (line.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
             } else if (line.startsWith("MESSAGE")) {
@@ -240,13 +240,12 @@ public class ChatClient implements DiscoveryListener {
 
     @Override
     public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
-//add the device to the vector
+        //add the device to the vector
         if (!arrDevices.contains(btDevice)) {
             arrDevices.add(btDevice);
         }
     }
-//implement this method since services are not being discovered
-
+    //implement this method since services are not being discovered
     @Override
     public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
         if (servRecord != null && servRecord.length > 0) {
@@ -257,7 +256,7 @@ public class ChatClient implements DiscoveryListener {
         }
     }
 
-//implement this method since services are not being discovered
+    //implement this method since services are not being discovered
     @Override
     public void serviceSearchCompleted(int transID, int respCode) {
         synchronized (lock) {

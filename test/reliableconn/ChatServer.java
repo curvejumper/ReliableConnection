@@ -58,8 +58,9 @@ public class ChatServer {
     private static HashSet<Network> writers = new HashSet<Network>();
 
     /**
-     * The appplication main method, which just listens on a port and spawns
+     * The application main method, which just listens on a port and spawns
      * handler threads.
+     *
      * @param args
      * @throws java.lang.Exception
      */
@@ -67,15 +68,15 @@ public class ChatServer {
 
         //Create a UUID for SPP
         UUID uuid = new UUID("1101", true);
-//Create the servicve url
+        //Create the servicve url
         String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
 
-//open server url
+        //open server url
         StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 
-//Wait for client connection
+        //Wait for client connection
         System.out.println("\nServer Started. Waiting for clients to connect…");
-//        StreamConnection connection = streamConnNotifier.acceptAndOpen();
+        //StreamConnection connection = streamConnNotifier.acceptAndOpen();
 
         System.out.println("The chat server is running.");
         ServerSocket listener = new ServerSocket(PORT);
@@ -134,16 +135,16 @@ public class ChatServer {
             try {
 
                 // Create character streams for the socket.
-//                in = new BufferedReader(new InputStreamReader(
-//                        network.getInputStream()));
-//                out = new PrintWriter(network.getOutputStream(), true);
+                //in = new BufferedReader(new InputStreamReader(
+                //network.getInputStream()));
+                //out = new PrintWriter(network.getOutputStream(), true);
                 // Request a name from this client.  Keep requesting until
                 // a name is submitted that is not already used.  Note that
                 // checking for the existence of a name and adding the name
                 // must be done while locking the set of names.
                 while (true) {
                     network.getOutputStream().println("SUBMITNAME");
-//                    network.getOutputStream("SUBMITNAME");
+                    //network.getOutputStream("SUBMITNAME");
                     name = network.getInputStream().readLine();
                     if (name == null) {
                         return;
@@ -160,7 +161,7 @@ public class ChatServer {
                 // socket's print writer to the set of all writers so
                 // this client can receive broadcast messages.
                 network.getOutputStream().println("NAMEACCEPTED");
-//                network.getOutputStream("NAMEACCEPTED");
+                //network.getOutputStream("NAMEACCEPTED");
                 writers.add(network);
 
                 // Accept messages from this client and broadcast them.
