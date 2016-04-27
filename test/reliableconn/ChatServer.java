@@ -185,12 +185,16 @@ public class ChatServer {
      * A handler thread class. Handlers are spawned from the listening loop and
      * are responsible for a dealing with a single client and broadcasting its
      * messages.
+     * 
+     * The handler constructor is dependent solely on the network. 
+     * This allows for a customizable handler thread without having to create a
+     * seperate class. 
      */
     private static class Handler extends Thread {
 
         private String name;
         private Socket socket;
-        Network network;
+        private Network network;
 
         /**
          * Constructs a handler thread, squirreling away the socket. All the
@@ -213,6 +217,13 @@ public class ChatServer {
             }
         }
 
+        /**
+         * Handler for only a server-socket connection. 
+         * 
+         * Accepts a java Socket client connection using TCP protocol
+         * 
+         * @param socket - Java socket
+         */
         public Handler(Socket socket) {
             this.socket = socket;
             network = new Network();
@@ -223,6 +234,13 @@ public class ChatServer {
             wP.connect(socket);
         }
 
+        /**
+         *  Handler for only a Bluetooth connection.
+         * 
+         * Accepts a StreamConnection client using SPP protocol
+         * 
+         * @param connection - client Bluetooth device StreamConnection
+         */
         public Handler(StreamConnection connection) {
             network = new Network();
             BluetoothProtocol bP = new BluetoothProtocol();
