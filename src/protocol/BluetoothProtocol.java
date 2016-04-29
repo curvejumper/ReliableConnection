@@ -51,7 +51,9 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     @Override
     public OutputStream getOutputStream() {
         try {
-            outStream = connection.openOutputStream();
+            if(outStream == null){
+                outStream = connection.openOutputStream();
+            }
 //            PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
 //            pWriter.write(msg + "\r\n");
 //            pWriter.flush();
@@ -67,7 +69,9 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     @Override
     public InputStream getInputStream() {
         try {
-            inStream = connection.openInputStream();
+            if(inStream == null){
+                inStream = connection.openInputStream();
+            }
         } catch (IOException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }
