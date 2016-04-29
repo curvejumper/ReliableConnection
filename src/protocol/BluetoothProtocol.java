@@ -151,10 +151,14 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
 //        } catch (IOException ex) {
 //            Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+        if (status()) {
+            //creates thread that checks messages in the network
+            System.out.println("notifying network that connection is good");
+            notifyObservers(this);
+        }
         return connection;
     }
 
-    
     public void connect(StreamConnection connection) throws BluetoothConnectionException {
         //TODO: make sure the ID is four bits
         this.connection = connection;
@@ -162,7 +166,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
         connect();
     }
 
-    public void connect(RemoteDevice remoteDevice) throws BluetoothConnectionException{
+    public void connect(RemoteDevice remoteDevice) throws BluetoothConnectionException {
         LocalDevice localDevice;
         try {
             localDevice = LocalDevice.getLocalDevice();
@@ -188,9 +192,8 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
                 connection = (StreamConnection) Connector.open(connectionURL);
                 isConnected = true;
             }
-            
-//            }
 
+//            }
         } catch (BluetoothStateException ex) {
             Logger.getLogger(BluetoothProtocol.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -246,7 +249,7 @@ public class BluetoothProtocol extends Protocol implements DiscoveryListener {
     }//end method
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Bluetooth protocol";
     }
 }
