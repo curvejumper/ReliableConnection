@@ -202,10 +202,12 @@ public class ChatClient implements DiscoveryListener {
         String wifiAddress = getWifiServerAddress();
         RemoteDevice btDevice = getBtServerAddress();
         System.out.println("Address: " + wifiAddress);
-        wP.connect(wifiAddress, 8888);
+        
         try {
             if(btDevice != null){
                 bP.connect(btDevice);
+            } else if(wifiAddress != null){
+                wP.connect(wifiAddress, 8888);
             }
         
         System.out.println("Connected to server!");
