@@ -32,7 +32,6 @@ import javax.bluetooth.LocalDevice;
 import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.ServiceRecord;
 import javax.bluetooth.BluetoothConnectionException;
-import static java.lang.Thread.sleep;
 
 /**
  * A simple Swing-based client for the chat server. Graphically it is a frame
@@ -88,8 +87,8 @@ public class ChatClient implements DiscoveryListener {
              * area in preparation for the next message.
              */
             public void actionPerformed(ActionEvent e) {
-                network.getOutputStream().println(textField.getText());
-                //network.getOutputStream(textField.getText());
+                network.println(textField.getText());
+                //network.println(textField.getText());
                 textField.setText("");
             }
         });
@@ -213,10 +212,10 @@ public class ChatClient implements DiscoveryListener {
         System.out.println("Connected to server!");
         // Process all messages from server, according to the protocol.
         while (true) {
-            String line = network.getInputStream().readLine();
+            String line = network.readLine();
             if (line.startsWith("SUBMITNAME")) {
-                network.getOutputStream().println(getName());
-                //network.getOutputStream(getName());
+                network.println(getName());
+                //network.println(getName());
             } else if (line.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
             } else if (line.startsWith("MESSAGE")) {

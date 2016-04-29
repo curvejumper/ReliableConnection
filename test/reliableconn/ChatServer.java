@@ -25,20 +25,20 @@ import reliableconn.ChatClient;
 
 /**
  * A multithreaded chat room server. When a client connects the server requests
- * a screen name by sending the client the text "SUBMITNAME", and keeps
- * requesting a name until a unique one is received. After a client submits a
- * unique name, the server acknowledges with "NAMEACCEPTED". Then all messages
- * from that client will be broadcast to all other clients that have submitted a
- * unique screen name. The broadcast messages are prefixed with "MESSAGE ".
- *
- * Because this is just a teaching example to illustrate a simple chat server,
- * there are a few features that have been left out. Two are very useful and
- * belong in production code:
- *
- * 1. The protocol should be enhanced so that the client can getOutputStream
- * clean disconnect messages to the server.
- *
- * 2. The server should do some logging.
+ a screen name by sending the client the text "SUBMITNAME", and keeps
+ requesting a name until a unique one is received. After a client submits a
+ unique name, the server acknowledges with "NAMEACCEPTED". Then all messages
+ from that client will be broadcast to all other clients that have submitted a
+ unique screen name. The broadcast messages are prefixed with "MESSAGE ".
+
+ Because this is just a teaching example to illustrate a simple chat server,
+ there are a few features that have been left out. Two are very useful and
+ belong in production code:
+
+ 1. The protocol should be enhanced so that the client can println
+ clean disconnect messages to the server.
+
+ 2. The server should do some logging.
  */
 public class ChatServer {
 
@@ -267,15 +267,15 @@ public class ChatServer {
                 // Create character streams for the socket.
                 //in = new BufferedReader(new InputStreamReader(
                 //network.getInputStream()));
-                //out = new PrintWriter(network.getOutputStream(), true);
+                //out = new PrintWriter(network.println(), true);
                 // Request a name from this client.  Keep requesting until
                 // a name is submitted that is not already used.  Note that
                 // checking for the existence of a name and adding the name
                 // must be done while locking the set of names.
                 while (true) {
-                    network.getOutputStream().println("SUBMITNAME");
-                    //network.getOutputStream("SUBMITNAME");
-                    name = network.getInputStream().readLine();
+                    network.println("SUBMITNAME");
+                    //network.println("SUBMITNAME");
+                    name = network.readLine();
                     if (name == null) {
                         return;
                     }
@@ -290,30 +290,32 @@ public class ChatServer {
                 // Now that a successful name has been chosen, add the
                 // socket's print writer to the set of all writers so
                 // this client can receive broadcast messages.
-                network.getOutputStream().println("NAMEACCEPTED");
-                //network.getOutputStream("NAMEACCEPTED");
+                network.println("NAMEACCEPTED");
+                //network.println("NAMEACCEPTED");
                 writers.add(network);
 
                 // Accept messages from this client and broadcast them.
                 // Ignore other clients that cannot be broadcasted to.
                 while (true) {
-                    String input = network.getInputStream().readLine();
+                    String input = network.readLine();
                     if (input == null) {
                         return;
                     }
                     for (Network writer : writers) {
-                        writer.getOutputStream().println("MESSAGE " + name + ": " + input);
+                        writer.println("MESSAGE " + name + ": " + input);
                     }
                 }
-            } catch (IOException e) {
-                System.out.println(e);
-            } finally {
+            } 
+//            catch (IOException e) {
+//                System.out.println(e);
+//            }
+            finally {
                 // This client is going down!  Remove its name and its print
                 // writer from the sets, and close its socket.
                 if (name != null) {
                     names.remove(name);
                 }
-                if (network.getOutputStream() != null) {
+                if (network.getBestOutputStream() != null) {
                     writers.remove(network);
                 }
                 try {

@@ -32,16 +32,37 @@ public class Network implements Observer{
     
     private boolean lock = false;
     
-    public PrintWriter getOutputStream(){
+    public void println(String msg){
+        for(Protocol protocol : protocolList){
+            PrintWriter tempPrintWriter = new PrintWriter(protocol.getOutputStream(), true);
+            tempPrintWriter.println(msg);
+        }
+    }
+    
+    public PrintWriter getBestOutputStream(){
         if(getBestProtocol().hasChanged() || printWriter == null){
             printWriter = new PrintWriter(getBestProtocol().getOutputStream(), true);
             return printWriter;
         } else {
-            return checkPrintWriter(printWriter);
+           return checkPrintWriter(printWriter);
         }
     }
     
-    public BufferedReader getInputStream(){
+    public String readLine() {
+        for(Protocol protocol : protocolList){
+            BufferedReader tempBufferedReader = new BufferedReader(new InputStreamReader(
+                        protocol.getInputStream()));
+            try {
+                    return tempBufferedReader.readLine();
+            } catch (IOException ex) {
+                System.err.println("Caught IOException on " + protocol.toString() + " msg: " + ex.getMessage());
+//                Logger.getLogger(Network.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public BufferedReader getBestInputStream(){
         if(getBestProtocol().hasChanged() || bufferedReader == null){
             bufferedReader = new BufferedReader(new InputStreamReader(
                         getBestProtocol().getInputStream()));
