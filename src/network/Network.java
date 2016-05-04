@@ -48,6 +48,7 @@ public class Network implements Observer{
         }
     }
     
+    
     public String readLine() {
         for(Protocol protocol : protocolList){
             BufferedReader tempBufferedReader = new BufferedReader(new InputStreamReader(
@@ -62,6 +63,10 @@ public class Network implements Observer{
         return null;
     }
     
+    /**
+     * 
+     * @return Best protocol for sending data from client to server
+     */
     public BufferedReader getBestInputStream(){
         if(getBestProtocol().hasChanged() || bufferedReader == null){
             bufferedReader = new BufferedReader(new InputStreamReader(
