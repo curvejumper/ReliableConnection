@@ -13,6 +13,12 @@ import java.io.OutputStream;
  * @author michael
  */
 public interface ProtocolInt {
+    /**
+     * This method is used to check if a <code>Protocol</code> is
+     * active and connected to a host. 
+     * 
+     * @return status of the <code>Procol</code> class
+     */
     public boolean status();
     
     public OutputStream getOutputStream();

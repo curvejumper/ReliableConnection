@@ -132,7 +132,7 @@ public class ChatServer {
             Logger.getLogger(ChatServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+  
     private static void wifiServer() {
         try {
             ServerSocket listener = new ServerSocket(PORT);
@@ -232,6 +232,8 @@ public class ChatServer {
             wP.addObserver(network);
 
             wP.connect(socket);
+            
+            
         }
 
         /**
@@ -274,7 +276,7 @@ public class ChatServer {
                 // must be done while locking the set of names.
                 while (true) {
                     network.println("SUBMITNAME");
-                    //network.println("SUBMITNAME");
+                    //System.out.println("N
                     name = network.readLine();
                     if (name == null) {
                         return;

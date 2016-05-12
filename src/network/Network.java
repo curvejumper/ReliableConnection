@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  */
 public class Network implements Observer{
 
-    LinkedList<Protocol> protocolList;
-    PrintWriter printWriter = null;
-    BufferedReader bufferedReader = null;
+    private LinkedList<Protocol> protocolList;
+    private PrintWriter printWriter = null;
+    private BufferedReader bufferedReader = null;
     
     public Network(){
         protocolList = new LinkedList();
@@ -35,8 +35,10 @@ public class Network implements Observer{
     public void println(String msg){
         for(Protocol protocol : protocolList){
             PrintWriter tempPrintWriter = new PrintWriter(protocol.getOutputStream(), true);
+//            System.out.println("Sending: " + msg + " on: " + protocol.toString());
             tempPrintWriter.println(msg);
         }
+        System.out.println("Sent: " + msg);
     }
     
     public PrintWriter getBestOutputStream(){
