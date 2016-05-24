@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +22,6 @@ import protocol.BluetoothProtocol;
 import network.Network;
 import protocol.WifiProtocol;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.DeviceClass;
 import javax.bluetooth.DiscoveryAgent;
